@@ -96,8 +96,16 @@ export function useSmoothScroll(routeKey?: string) {
     const update = () => {
       const h = window.innerHeight
       const vw = window.innerWidth
+      // ≤1024px (mobile + tablet): matikan parallax & stagger diagonal —
+      // elemen besar yang digeser-geser terlihat goyang/overlap di layar kecil.
+      const small = vw <= 1024
 
       for (const it of parallaxItems) {
+        if (small) {
+          // balikin ke posisi dasar (jaga translateX -50% utk foto about/contact)
+          it.el.style.transform = it.baseX !== "0" ? `translate3d(${it.baseX}, 0, 0)` : ""
+          continue
+        }
         const r = it.el.getBoundingClientRect()
         const y = (r.top + r.height / 2 - h / 2) * it.speed
         it.el.style.transform = `translate3d(${it.baseX}, ${y.toFixed(2)}px, 0)`
@@ -111,7 +119,9 @@ export function useSmoothScroll(routeKey?: string) {
 
       for (const it of revealItems) {
         const r = it.el.getBoundingClientRect()
-        const shift = it.stagger ? (r.left / vw) * 0.12 : 0
+        // di layar kecil: tanpa stagger diagonal + jarak naik diperkecil biar halus
+        const shift = it.stagger && !small ? (r.left / vw) * 0.12 : 0
+        const dist = small ? Math.min(it.y, 36) : it.y
         const start = (it.start - shift) * h
         const end = (it.end - shift) * h
         const p = clamp((start - r.top) / (start - end), 0, 1)
@@ -121,7 +131,7 @@ export function useSmoothScroll(routeKey?: string) {
           it.el.style.transform = ""
         } else {
           it.el.style.opacity = p.toFixed(3)
-          it.el.style.transform = `translate3d(0, ${((1 - p) * it.y).toFixed(2)}px, 0)`
+          it.el.style.transform = `translate3d(0, ${((1 - p) * dist).toFixed(2)}px, 0)`
         }
       }
     }
