@@ -47,6 +47,9 @@ const REVEAL: Reveal[] = [
   { sel: ".about-stats .stat", y: 40, stagger: true },
   { sel: ".skill-card", y: 80, stagger: true },
   { sel: ".work-card", y: 80, stagger: true },
+  // block tambahan di dedicated page
+  { sel: ".page-block", y: 40, stagger: true },
+  { sel: ".dossier", y: 50, stagger: true },
   // baris kontak: window tinggi & cepat selesai (section terakhir, scroll mepet)
   { sel: ".contact-row", y: 30, start: 0.95, end: 0.82, stagger: true },
 ]

@@ -50,7 +50,7 @@ function Hero() {
                 <span className="accent">●</span> Frontend Developer
               </div>
               <div>
-                <span className="accent">●</span> AR Tinkerer
+                <span className="accent">●</span> Web Developer
               </div>
             </div>
             <div className="hero-bio">

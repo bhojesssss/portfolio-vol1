@@ -1,6 +1,6 @@
 import { PORTRAIT_CONTACT } from "../assets"
 
-function Contact() {
+function Contact({ detailed = false }: { detailed?: boolean }) {
   return (
     <section className="contact" id="contact" data-screen-label="05 Contact">
       <div className="wrap">
@@ -48,12 +48,12 @@ function Contact() {
               </a>
               <a
                 className="contact-row"
-                href="https://instagram.com/bhojanaradhipa"
+                href="https://github.com/bhojesssss"
                 target="_blank"
                 rel="noopener"
               >
-                <span className="lbl">Instagram</span>
-                <span className="val">@bhojanaradhipa</span>
+                <span className="lbl">GitHub</span>
+                <span className="val">github.com/bhojesssss</span>
                 <span className="ch">↗</span>
               </a>
               <a
@@ -64,6 +64,16 @@ function Contact() {
               >
                 <span className="lbl">LinkedIn</span>
                 <span className="val">Bhoja Naradhipa</span>
+                <span className="ch">↗</span>
+              </a>
+              <a
+                className="contact-row"
+                href="https://instagram.com/bhojanaradhipa"
+                target="_blank"
+                rel="noopener"
+              >
+                <span className="lbl">Instagram</span>
+                <span className="val">@bhojanaradhipa</span>
                 <span className="ch">↗</span>
               </a>
               <a
@@ -79,6 +89,39 @@ function Contact() {
             </div>
           </div>
         </div>
+
+        {detailed && (
+          <div className="page-extra">
+            <div className="page-block">
+              <div className="page-block-label">Availability / What's open</div>
+              <div className="page-block-body">
+                Open for internships (yes — Apple Developer Academy, I see you),
+                freelance interface &amp; frontend work, AR experiments, brand and
+                design systems, and student collabs that actually ship.
+              </div>
+            </div>
+
+            <div className="page-block">
+              <div className="page-block-label">Best fit</div>
+              <div className="page-block-body">
+                <span className="page-quote">
+                  Best fit: a team that wants a designer who codes — or a
+                  developer who cares what it looks like.
+                </span>
+              </div>
+            </div>
+
+            <div className="page-block">
+              <div className="page-block-label">Sign-off</div>
+              <div className="page-block-body">
+                Send something. Worst case you get a fast, polite reply; best case
+                we make something slightly weird together.
+                <br />
+                <span className="page-signoff">— Bhoja · Jakarta · GMT+7</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )

@@ -4,7 +4,7 @@ import Marquee from "../components/Marquee"
 function WorkPage() {
   return (
     <>
-      <Projects />
+      <Projects detailed />
       <Marquee />
     </>
   )

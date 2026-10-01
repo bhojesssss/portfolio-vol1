@@ -4,7 +4,7 @@ import Marquee from "../components/Marquee"
 function AboutPage() {
   return (
     <>
-      <About />
+      <About detailed />
       <Marquee />
     </>
   )

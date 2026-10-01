@@ -4,7 +4,7 @@ import Marquee from "../components/Marquee"
 function SkillsPage() {
   return (
     <>
-      <Skills />
+      <Skills detailed />
       <Marquee />
     </>
   )

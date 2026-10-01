@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react"
-import { NavLink, Link } from "react-router-dom"
+import { NavLink, Link, useLocation, useNavigate } from "react-router-dom"
+import { lenisScrollTo } from "../useSmoothScroll"
 
+// section: link ini scroll ke section di landing page, bukan buka page
 const NAV_LINKS = [
   { to: "/about", label: "About" },
   { to: "/skills", label: "Skills" },
   { to: "/work", label: "Work" },
-  { to: "/contact", label: "Contact" },
+  { to: "/#contact", label: "Contact", section: "#contact" },
 ]
 
 function Navbar() {
   const [time, setTime] = useState("")
   const [open, setOpen] = useState(false)
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const tick = () => {
@@ -37,6 +41,15 @@ function Navbar() {
 
   const close = () => setOpen(false)
 
+  // udah di landing → langsung scroll; dari page lain → balik ke landing dulu,
+  // scroll-nya dikerjain Home lewat state
+  const goSection = (e: React.MouseEvent, section: string) => {
+    e.preventDefault()
+    close()
+    if (pathname === "/") lenisScrollTo(section)
+    else navigate("/", { state: { scrollTo: section } })
+  }
+
   return (
     <>
       <div className="topbar">
@@ -51,7 +64,9 @@ function Navbar() {
           <NavLink to="/about">About</NavLink>
           <NavLink to="/skills">Skills</NavLink>
           <NavLink to="/work">Work</NavLink>
-          <NavLink to="/contact">Contact</NavLink>
+          <Link to="/#contact" onClick={(e) => goSection(e, "#contact")}>
+            Contact
+          </Link>
         </nav>
         <div className="time">
           Jakarta {time} <span style={{ color: "var(--red)" }}>●</span> Available
@@ -78,18 +93,26 @@ function Navbar() {
           <span>Vol. 01 / 2026</span>
         </div>
         <nav>
-          {NAV_LINKS.map((l, i) => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              onClick={close}
-              style={{ "--i": i } as React.CSSProperties}
-            >
-              <span className="n">0{i + 1}</span>
-              <span className="t">{l.label}</span>
-              <span className="ar">→</span>
-            </NavLink>
-          ))}
+          {NAV_LINKS.map((l, i) => {
+            const style = { "--i": i } as React.CSSProperties
+            const inner = (
+              <>
+                <span className="n">0{i + 1}</span>
+                <span className="t">{l.label}</span>
+                <span className="ar">→</span>
+              </>
+            )
+            // Link biasa buat section — NavLink ke "/#..." bakal "active" terus di landing
+            return l.section ? (
+              <Link key={l.to} to={l.to} onClick={(e) => goSection(e, l.section)} style={style}>
+                {inner}
+              </Link>
+            ) : (
+              <NavLink key={l.to} to={l.to} onClick={close} style={style}>
+                {inner}
+              </NavLink>
+            )
+          })}
         </nav>
         <div className="nav-mobile-foot">
           Jakarta {time} <span style={{ color: "var(--red)" }}>●</span> Available

@@ -1,7 +1,7 @@
 import Contact from "../components/Contact"
 
 function ContactPage() {
-  return <Contact />
+  return <Contact detailed />
 }
 
 export default ContactPage

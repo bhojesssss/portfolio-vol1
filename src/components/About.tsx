@@ -1,6 +1,6 @@
 import { PORTRAIT_ABOUT } from "../assets"
 
-function About() {
+function About({ detailed = false }: { detailed?: boolean }) {
   return (
     <section className="section" id="about" data-screen-label="02 About">
       <div className="wrap">
@@ -39,18 +39,23 @@ function About() {
               <span className="it">augment reality</span>.
             </p>
             <p>
-              Two years deep into making things for screens, half of those spent
-              overthinking pixel-perfect grids and the other half writing
-              components that ship. I think a good interface is loud where it
-              matters and quiet everywhere else.
+              Two years into making things for screens. CS at Binus, Multimedia
+              track — a fancy way of saying I get to design the thing and then go
+              build it too. Half my time goes to overthinking grids in Figma; the
+              other half to writing components that actually ship.
             </p>
             <p>
-              When I'm not in Figma or a code editor, I'm building AR demos in
-              Unity — pointing a phone at a marker and pretending I summoned
-              something into the room never stopped being fun.
+              I care about interfaces that are loud where it matters and quiet
+              everywhere else. Most of what I make leans high-contrast, a little
+              brutal, occasionally premium-dark — never beige.
+            </p>
+            <p>
+              When I'm not in a code editor, I'm pointing a phone at a marker in
+              Unity, pretending I summoned something into the room. That part
+              never got old.
             </p>
 
-            <div className="about-stats">
+            <div className={`about-stats${detailed ? " four" : ""}`}>
               <div className="stat">
                 <div className="n">
                   02<span className="red">+</span>
@@ -67,9 +72,64 @@ function About() {
                 <div className="n">∞</div>
                 <div className="l">Ideas in backlog</div>
               </div>
+              {detailed && (
+                <div className="stat">
+                  <div className="n">05</div>
+                  <div className="l">Projects shipped</div>
+                </div>
+              )}
             </div>
           </div>
         </div>
+
+        {detailed && (
+          <div className="page-extra">
+            <div className="page-block">
+              <div className="page-block-label">Currently / Jun 2026</div>
+              <div className="page-block-body">
+                <ul>
+                  <li>
+                    <strong>Building Gadgify</strong> — marker-based AR that turns
+                    a printed marker into a 3D product you can spin with your
+                    thumb.
+                  </li>
+                  <li>
+                    <strong>Shaping NATY</strong> — a Nusantara-rooted software
+                    house, with a small team.
+                  </li>
+                  <li>
+                    <strong>Quietly assembling</strong> an application for the
+                    Apple Developer Academy.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="page-block">
+              <div className="page-block-label">Principles / How I think</div>
+              <div className="page-block-body">
+                <ol>
+                  <li>Loud where it matters, quiet everywhere else.</li>
+                  <li>
+                    Systems first, decoration second — steal the grid, not the
+                    soul.
+                  </li>
+                  <li>If it doesn't ship, it didn't happen.</li>
+                  <li>A little weird, on purpose.</li>
+                </ol>
+              </div>
+            </div>
+
+            <div className="page-block">
+              <div className="page-block-label">Colophon</div>
+              <div className="page-block-body colophon">
+                Vol. 01 — set in Anton, Instrument Serif &amp; Space Mono.
+                Hand-built in React + Vite, scrolled by Lenis. No templates were
+                involved, for better or worse.
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )

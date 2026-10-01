@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import { Link } from "react-router-dom"
 
 /** Slot gambar. trio = [browser, tablet, phone]; phones = 3 layar HP. */
 type Shots = {
@@ -6,6 +7,17 @@ type Shots = {
   tablet?: string
   phone?: string
   phones?: string[]
+}
+
+/** Detail ringkas buat dossier di halaman /work. */
+type Detail = {
+  year: string
+  type: string
+  role: string
+  stack: string
+  summary: string
+  built: string[]
+  status: string
 }
 
 type Project = {
@@ -20,15 +32,45 @@ type Project = {
   shots?: Shots
   /** kalau ada → footer pakai tombol-tombol ini, bukan "Read case". primary = merah */
   links?: { label: string; href: string; primary?: boolean }[]
+  detail?: Detail
 }
 
 const projects: Project[] = [
   {
-    span: "half",
+    span: "full",
     num: "N° 01 / 05",
     tag: "Featured",
     tagRed: true,
     ph: "01",
+    title: <>NATY</>,
+    sub: "Brand and portfolio site for NATY, a Nusantara-rooted software house I'm building with a small team.",
+    mockup: "trio",
+    shots: {
+      browser: "/NATY-desktop.png",
+      tablet: "/NATY-tab.png",
+      phone: "/NATY-HP.png",
+    },
+    links: [{ label: "Deployment", href: "https://www.natynext.com/", primary: true }],
+    detail: {
+      year: "2026",
+      type: "Brand + site",
+      role: "Design + frontend",
+      stack: "Next.js · React",
+      summary:
+        "Brand and portfolio site for NATY — a Nusantara-rooted software house I'm building with a small team. The public face of the studio.",
+      built: [
+        "Defined the brand direction and visual language.",
+        "Designed and built the marketing site, responsive across every breakpoint.",
+      ],
+      status: "Live · natynext.com",
+    },
+  },
+  {
+    span: "half",
+    num: "N° 02 / 05",
+    tag: "Web App",
+    tagRed: true,
+    ph: "02",
     title: <>RESTMATERIAL</>,
     sub: "Surplus construction materials marketplace with CO₂ tracking. Juara Harapan 2 (Top 5) — I/O Festival 2026.",
     mockup: "trio",
@@ -41,15 +83,29 @@ const projects: Project[] = [
       { label: "GitHub", href: "https://github.com/bhojesssss/FE-RESTMATERIAL" },
       { label: "Deployment", href: "https://fe-restmaterial.vercel.app/", primary: true },
     ],
+    detail: {
+      year: "2026",
+      type: "Web app / Marketplace",
+      role: "Frontend + design system + video",
+      stack: "React · Vite · REST API",
+      summary:
+        "A marketplace for surplus construction materials — the leftover bricks, tiles, and steel that usually end up as waste — with CO₂ saved tracked on every listing. Built for I/O Festival 2026, where it took Juara Harapan 2 (Top 5).",
+      built: [
+        "Extracted the design system and wired the frontend to the API, end-to-end.",
+        "Shipped a live chat widget, inline listing edits, and category filtering.",
+        "Produced the demo video — script, voiceover, and assets.",
+      ],
+      status: "Top 5 @ I/O Festival 2026 · Live",
+    },
   },
   {
     span: "half",
-    num: "N° 02 / 05",
+    num: "N° 03 / 05",
     tag: "Web app",
     tagRed: true,
-    ph: "02",
+    ph: "03",
     title: <>Chi-Matcha</>,
-    sub: "Placeholder description — ganti nanti.",
+    sub: "Premium matcha-café ordering app — Figma design system, built native on Android with Java + XML.",
     mockup: "phones",
     shots: { phones: ["/Chi1.jpg", "/Chi2.jpg", "/Chi3.jpg"] },
     links: [
@@ -59,13 +115,27 @@ const projects: Project[] = [
         href: "https://www.figma.com/design/xPuQy1iiNdPdmb3GLpAH7O/UX-LAB?node-id=0-1&t=9kmUjxPoE1vQDFRp-1",
       },
     ],
+    detail: {
+      year: "2025–26",
+      type: "Mobile app (Android) / UX",
+      role: "Design + Android dev",
+      stack: "Java · XML · Android Studio · Figma",
+      summary:
+        "A premium matcha-café ordering app — browse the menu, customize your drink, check out, all in a calm matcha-green world. Designed in Figma first, then built native on Android.",
+      built: [
+        "Designed the full system in Figma — Fraunces + DM Sans, a matcha-green palette.",
+        "Built the Android UI in Java + XML straight from that design.",
+        "Menu browsing, drink customization, and an ordering/checkout flow.",
+      ],
+      status: "Course project (UX / Mobile Programming) · Figma + build",
+    },
   },
   {
     span: "half",
-    num: "N° 03 / 05",
+    num: "N° 04 / 05",
     tag: "Web App",
     tagRed: true,
-    ph: "03",
+    ph: "04",
     title: <>SecondSpace</>,
     sub: "Neo-brutalist thrift & preloved fashion marketplace. Vue 3 + Supabase, shipped to Vercel.",
     mockup: "trio",
@@ -79,35 +149,63 @@ const projects: Project[] = [
       { label: "BE GitHub", href: "https://github.com/bhojesssss/BE_SS" },
       { label: "Deployment", href: "https://second-space-omega.vercel.app/", primary: true },
     ],
+    detail: {
+      year: "2025",
+      type: "Web app / Marketplace",
+      role: "Full-stack (~60%)",
+      stack:
+        "Vue 3 · Vite · Tailwind v4 · Pinia · Node / Express 5 · Supabase (Postgres, RLS, JWT) · Vercel",
+      summary:
+        "A neo-brutalist marketplace for preloved fashion and sports gear. An end-to-end build — frontend, backend, auth, database — shipped to Vercel.",
+      built: [
+        "Built the full Vue 3 + Tailwind frontend and the Express backend.",
+        "Set up Supabase Postgres with row-level security and JWT auth.",
+        "Owned ~60% of the project, pitch deck included.",
+      ],
+      status: "AoL Software Engineering · Live",
+    },
   },
   {
     span: "half",
-    num: "N° 04 / 05",
+    num: "N° 05 / 05",
     tag: "AR / Unity",
     tagRed: true,
-    ph: "04",
+    ph: "05",
     title: <>Gadgify</>,
     sub: "Marker-based AR product showcase for Android. Unity 6 + Vuforia — scan a marker, get an interactive 3D product.",
     mockup: "phones",
     shots: { phones: ["/gadgify1.jpg", "/gadgify2.png", "/gadgify3.jpg"] },
     links: [{ label: "GitHub", href: "https://github.com/bhojesssss/Gadgify" }],
-  },
-  {
-    span: "full",
-    num: "N° 05 / 05",
-    tag: "Featured",
-    tagRed: true,
-    ph: "05",
-    title: <>NATY</>,
-    sub: "Brand and portfolio site for NATY, a Nusantara-rooted software house I'm building with a small team.",
-    mockup: "trio",
-    shots: {
-      browser: "/NATY-desktop.png",
-      tablet: "/NATY-tab.png",
-      phone: "/NATY-HP.png",
+    detail: {
+      year: "2026",
+      type: "AR / Unity",
+      role: "Solo build",
+      stack: "Unity 6 · Vuforia · C# · Android",
+      summary:
+        "Marker-based AR product showcase. Scan a printed marker and an interactive 3D product appears — spin it, drag it, zoom into the details.",
+      built: [
+        "A MacBook scene with auto-rotate, drag-to-rotate, and pinch-to-zoom.",
+        "A ProductDetail UI driven by a Render Texture.",
+        "More markers on the way (ROG Ally, Galaxy S25 Ultra, Switch).",
+      ],
+      status: "In progress · Demo soon",
     },
-    links: [{ label: "Deployment", href: "https://www.natynext.com/", primary: true }],
   },
+]
+
+/** Work kecil/lain yang gak di-highlight — cuma muncul di halaman /work. */
+type MoreProject = {
+  title: string
+  type: string
+  year: string
+  href?: string
+}
+
+const moreProjects: MoreProject[] = [
+  { title: "Project name", type: "Web · Course project", year: "2025", href: "#" },
+  { title: "Project name", type: "UI / UX · Figma", year: "2025", href: "#" },
+  { title: "Project name", type: "Video · Aftermovie", year: "2024", href: "#" },
+  { title: "Project name", type: "Design · Poster", year: "2024", href: "#" },
 ]
 
 /** Device mockups. variant "trio" = browser+tablet+phone, "phones" = 3 HP. */
@@ -159,19 +257,19 @@ function DeviceMockups({
   )
 }
 
-function Projects() {
+function Projects({ detailed = false }: { detailed?: boolean }) {
   return (
     <section className="section" id="work" data-screen-label="04 Work">
       <div className="wrap">
         <header className="section-head">
           <div className="section-num">N° 04</div>
           <h2 className="section-title">
-            Selected <span className="it">work</span>
+            All of my <span className="it">works</span>
           </h2>
           <div className="section-meta">
-            Placeholders
+            05 works
             <br />
-            Real cases dropping soon
+            2025—26
           </div>
         </header>
 
@@ -225,6 +323,60 @@ function Projects() {
             )
           })}
         </div>
+
+        {/* landing cuma nampilin highlight; daftar lengkap + arsip ada di /work */}
+        {!detailed && (
+          <div className="work-more">
+            <Link to="/work" className="work-btn work-more-btn">
+              See more works <span className="ic">→</span>
+            </Link>
+          </div>
+        )}
+
+        {detailed && (
+          <div className="more-work">
+            <header className="more-work-head">
+              <span className="more-work-label">Also in the archive</span>
+              <span className="more-work-meta">{moreProjects.length} more</span>
+            </header>
+            <div className="more-grid">
+              {moreProjects.map((m, i) => {
+                const inner = (
+                  <>
+                    <div className="more-card-top">
+                      <span className="more-card-num">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="more-card-year">{m.year}</span>
+                    </div>
+                    <h4 className="more-card-title">{m.title}</h4>
+                    <span className="more-card-type">{m.type}</span>
+                    {m.href && (
+                      <span className="more-card-arrow" aria-hidden="true">
+                        ↗
+                      </span>
+                    )}
+                  </>
+                )
+                return m.href ? (
+                  <a
+                    className="more-card"
+                    key={i}
+                    href={m.href}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {inner}
+                  </a>
+                ) : (
+                  <div className="more-card" key={i}>
+                    {inner}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )
