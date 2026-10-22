@@ -22,10 +22,8 @@ type Detail = {
 
 type Project = {
   span: "feat" | "std" | "half" | "full"
-  num: string
   tag: string
   tagRed?: boolean
-  ph: string
   title: ReactNode
   sub: string
   mockup?: "trio" | "phones"
@@ -33,15 +31,16 @@ type Project = {
   /** kalau ada → footer pakai tombol-tombol ini, bukan "Read case". primary = merah */
   links?: { label: string; href: string; primary?: boolean }[]
   detail?: Detail
+  /** true → cuma tampil di /work, gak di landing */
+  workOnly?: boolean
 }
 
+/** Urutan di sini = urutan tampil. Nomor "N° xx / yy" dihitung otomatis. */
 const projects: Project[] = [
   {
     span: "full",
-    num: "N° 01 / 05",
     tag: "Featured",
     tagRed: true,
-    ph: "01",
     title: <>NATY</>,
     sub: "Brand and portfolio site for NATY, a Nusantara-rooted software house I'm building with a small team.",
     mockup: "trio",
@@ -66,11 +65,37 @@ const projects: Project[] = [
     },
   },
   {
+    // TODO: tag, deskripsi + link Lacroi
     span: "half",
-    num: "N° 02 / 05",
     tag: "Web App",
     tagRed: true,
-    ph: "02",
+    title: <>Lacroi</>,
+    sub: "Description coming soon.",
+    mockup: "trio",
+    shots: {
+      browser: "/LC-desktop.png",
+      tablet: "/LC-tab.png",
+      phone: "/LC-hp.png",
+    },
+  },
+  {
+    // TODO: tag, deskripsi + link Mataram
+    span: "half",
+    tag: "Web App",
+    tagRed: true,
+    title: <>Mataram</>,
+    sub: "Description coming soon.",
+    mockup: "trio",
+    shots: {
+      browser: "/MT-desktop.png",
+      tablet: "/MT-tab.png",
+      phone: "/MT-hp.png",
+    },
+  },
+  {
+    span: "half",
+    tag: "Web App",
+    tagRed: true,
     title: <>RESTMATERIAL</>,
     sub: "Surplus construction materials marketplace with CO₂ tracking. Juara Harapan 2 (Top 5) — I/O Festival 2026.",
     mockup: "trio",
@@ -100,10 +125,8 @@ const projects: Project[] = [
   },
   {
     span: "half",
-    num: "N° 03 / 05",
     tag: "Web app",
     tagRed: true,
-    ph: "03",
     title: <>Chi-Matcha</>,
     sub: "Premium matcha-café ordering app — Figma design system, built native on Android with Java + XML.",
     mockup: "phones",
@@ -132,10 +155,8 @@ const projects: Project[] = [
   },
   {
     span: "half",
-    num: "N° 04 / 05",
     tag: "Web App",
     tagRed: true,
-    ph: "04",
     title: <>SecondSpace</>,
     sub: "Neo-brutalist thrift & preloved fashion marketplace. Vue 3 + Supabase, shipped to Vercel.",
     mockup: "trio",
@@ -164,13 +185,12 @@ const projects: Project[] = [
       ],
       status: "AoL Software Engineering · Live",
     },
+    workOnly: true,
   },
   {
     span: "half",
-    num: "N° 05 / 05",
     tag: "AR / Unity",
     tagRed: true,
-    ph: "05",
     title: <>Gadgify</>,
     sub: "Marker-based AR product showcase for Android. Unity 6 + Vuforia — scan a marker, get an interactive 3D product.",
     mockup: "phones",
@@ -190,6 +210,7 @@ const projects: Project[] = [
       ],
       status: "In progress · Demo soon",
     },
+    workOnly: true,
   },
 ]
 
@@ -201,12 +222,15 @@ type MoreProject = {
   href?: string
 }
 
+// TODO: tahun + link tiap arsip
 const moreProjects: MoreProject[] = [
-  { title: "Project name", type: "Web · Course project", year: "2025", href: "#" },
-  { title: "Project name", type: "UI / UX · Figma", year: "2025", href: "#" },
-  { title: "Project name", type: "Video · Aftermovie", year: "2024", href: "#" },
-  { title: "Project name", type: "Design · Poster", year: "2024", href: "#" },
+  { title: "Photoshop works", type: "Design · Photoshop", year: "2025", href: "#" },
+  { title: "Video editing works", type: "Video · Editing", year: "2025", href: "#" },
+  { title: "Figma works", type: "UI / UX · Figma", year: "2024", href: "#" },
+  { title: "Roblox Studio works", type: "Game · Roblox Studio", year: "2024", href: "#" },
 ]
+
+const pad2 = (n: number) => String(n).padStart(2, "0")
 
 /** Device mockups. variant "trio" = browser+tablet+phone, "phones" = 3 HP. */
 function DeviceMockups({
@@ -258,6 +282,10 @@ function DeviceMockups({
 }
 
 function Projects({ detailed = false }: { detailed?: boolean }) {
+  // landing cuma highlight; /work tampilin semuanya
+  const list = detailed ? projects : projects.filter((p) => !p.workOnly)
+  const total = pad2(list.length)
+
   return (
     <section className="section" id="work" data-screen-label="04 Work">
       <div className="wrap">
@@ -267,23 +295,26 @@ function Projects({ detailed = false }: { detailed?: boolean }) {
             All of my <span className="it">works</span>
           </h2>
           <div className="section-meta">
-            05 works
+            {total} works
             <br />
             2025—26
           </div>
         </header>
 
         <div className="work-grid">
-          {projects.map((p) => {
+          {list.map((p, i) => {
+            const n = pad2(i + 1)
             const inner = (
               <>
-                <div className="ph">{p.ph}</div>
+                <div className="ph">{n}</div>
                 <DeviceMockups variant={p.mockup} shots={p.shots} />
                 <div className="work-head">
                   <span className={`work-tag${p.tagRed ? " red" : ""}`}>
                     {p.tag}
                   </span>
-                  <span className="work-num">{p.num}</span>
+                  <span className="work-num">
+                    N° {n} / {total}
+                  </span>
                 </div>
                 <div className="work-foot">
                   <h3 className="work-title">{p.title}</h3>
@@ -313,11 +344,11 @@ function Projects({ detailed = false }: { detailed?: boolean }) {
 
             // card dengan tombol = <article> (hindari <a> dalam <a>); selain itu link biasa
             return p.links ? (
-              <article className={`work-card ${p.span}`} key={p.ph}>
+              <article className={`work-card ${p.span}`} key={i}>
                 {inner}
               </article>
             ) : (
-              <a href="#" className={`work-card ${p.span}`} key={p.ph}>
+              <a href="#" className={`work-card ${p.span}`} key={i}>
                 {inner}
               </a>
             )
@@ -344,9 +375,7 @@ function Projects({ detailed = false }: { detailed?: boolean }) {
                 const inner = (
                   <>
                     <div className="more-card-top">
-                      <span className="more-card-num">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
+                      <span className="more-card-num">{pad2(i + 1)}</span>
                       <span className="more-card-year">{m.year}</span>
                     </div>
                     <h4 className="more-card-title">{m.title}</h4>
