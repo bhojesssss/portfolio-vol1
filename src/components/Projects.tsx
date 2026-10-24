@@ -1,5 +1,9 @@
-import type { ReactNode } from "react"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 import { Link } from "react-router-dom"
+import GlassFolder, {
+  type FolderFile,
+  type GlassFolderProps,
+} from "./ui/glass-folder-cards"
 
 /** Slot gambar. trio = [browser, tablet, phone]; phones = 3 layar HP. */
 type Shots = {
@@ -65,31 +69,59 @@ const projects: Project[] = [
     },
   },
   {
-    // TODO: tag, deskripsi + link Lacroi
     span: "half",
-    tag: "Web App",
+    tag: "E-commerce",
     tagRed: true,
     title: <>Lacroi</>,
-    sub: "Description coming soon.",
+    sub: "Drop store for LACROI, a clothing label from Rengat. Limited-quota drops, catalog filters, cart, and Biteship shipping. Built with NATY.",
     mockup: "trio",
     shots: {
       browser: "/LC-desktop.png",
       tablet: "/LC-tab.png",
       phone: "/LC-hp.png",
     },
+    links: [{ label: "Deployment", href: "https://lacroidept.com/", primary: true }],
+    detail: {
+      year: "2026",
+      type: "E-commerce / Drop store",
+      role: "Design + frontend · via NATY",
+      stack: "Next.js · React · Biteship",
+      summary:
+        "A drop store for LACROI, a clothing label founded in 2026 and rooted in Danau Raja, a lake in Rengat. Every drop has a limited quota — first come, first served.",
+      built: [
+        "Catalog with filters for product type, size, availability, and price.",
+        "Cart and customer accounts: orders, profile, and settings.",
+        "Shipping through Biteship courier partners.",
+      ],
+      status: "Client work via NATY · Live · lacroidept.com",
+    },
   },
   {
-    // TODO: tag, deskripsi + link Mataram
     span: "half",
-    tag: "Web App",
+    tag: "Heritage / 3D",
     tagRed: true,
     title: <>Mataram</>,
-    sub: "Description coming soon.",
+    sub: "Bilingual digital-heritage site for the House of Mataram: an interactive timeline, a Three.js 3D scene, and a CMS for the royal archive.",
     mockup: "trio",
     shots: {
       browser: "/MT-desktop.png",
       tablet: "/MT-tab.png",
       phone: "/MT-hp.png",
+    },
+    links: [{ label: "Deployment", href: "https://mataram3-d.vercel.app/", primary: true }],
+    detail: {
+      year: "2026",
+      type: "Web / Digital heritage",
+      role: "Design + frontend",
+      stack: "React · Vite · Tailwind · Three.js",
+      summary:
+        "A digital heritage experience for the House of Mataram: two centuries of Javanese royal history, from the granted forest of 1556 to the Treaty of Giyanti in 1755, told in Indonesian and English.",
+      built: [
+        "Keyboard-navigable timeline, plus pages for the royal house, the palace, and the archive.",
+        "A lazy-loaded Three.js scene that renders GLB models.",
+        "ID / EN language toggle and an admin dashboard for publishing archive entries.",
+      ],
+      status: "Live · mataram3-d.vercel.app",
     },
   },
   {
@@ -220,14 +252,64 @@ type MoreProject = {
   type: string
   year: string
   href?: string
+  /** teks outline gede di depan folder — format file-nya */
+  stamp: string
+  /** isi folder yang nongol pas di-hover. maks 4 yang keliatan */
+  files: FolderFile[]
 }
 
 // TODO: tahun + link tiap arsip
+// TODO: ganti placeholder — tambahin `image: "/nama-file.png"` (rasio ±3:2), plus name-nya.
+//       tanpa image = kertas polos; gambar otomatis monokrom, berwarna pas hover
 const moreProjects: MoreProject[] = [
-  { title: "Photoshop works", type: "Design · Photoshop", year: "2025", href: "#" },
-  { title: "Video editing works", type: "Video · Editing", year: "2025", href: "#" },
-  { title: "Figma works", type: "UI / UX · Figma", year: "2024", href: "#" },
-  { title: "Roblox Studio works", type: "Game · Roblox Studio", year: "2024", href: "#" },
+  {
+    title: "Photoshop works",
+    type: "Design · Photoshop",
+    year: "2025",
+    href: "#",
+    stamp: "PSD",
+    files: [
+      { name: "Untitled 01", meta: "PSD" },
+      { name: "Untitled 02", meta: "PSD" },
+      { name: "Untitled 03", meta: "PSD" },
+    ],
+  },
+  {
+    title: "Video editing works",
+    type: "Video · Editing",
+    year: "2025",
+    href: "#",
+    stamp: "MP4",
+    files: [
+      { name: "Untitled 01", meta: "MP4" },
+      { name: "Untitled 02", meta: "MP4" },
+      { name: "Untitled 03", meta: "MP4" },
+    ],
+  },
+  {
+    title: "Figma works",
+    type: "UI / UX · Figma",
+    year: "2024",
+    href: "#",
+    stamp: "FIG",
+    files: [
+      { name: "Untitled 01", meta: "FIG" },
+      { name: "Untitled 02", meta: "FIG" },
+      { name: "Untitled 03", meta: "FIG" },
+    ],
+  },
+  {
+    title: "Lightroom works",
+    type: "Photo · Lightroom",
+    year: "2024",
+    href: "#",
+    stamp: "RAW",
+    files: [
+      { name: "Untitled 01", meta: "RAW" },
+      { name: "Untitled 02", meta: "RAW" },
+      { name: "Untitled 03", meta: "RAW" },
+    ],
+  },
 ]
 
 const pad2 = (n: number) => String(n).padStart(2, "0")
@@ -277,6 +359,39 @@ function DeviceMockups({
           {shots?.phone && <img src={shots.phone} alt="" />}
         </div>
       </div>
+    </div>
+  )
+}
+
+/** Ukuran asli GlassFolder di width 340: tinggi = (272 + 54 headroom). */
+const FOLDER_W = 340
+const FOLDER_H = 326
+
+/**
+ * GlassFolder digambar fix di 340px lalu di-scale pakai CSS ngikutin lebar kotak.
+ * Kalau `width`-nya yang diganti, art canvas-nya di-render ulang tiap resize.
+ */
+function FitFolder(props: GlassFolderProps) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(0)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const ro = new ResizeObserver(([e]) =>
+      setScale(Math.min(1, e.contentRect.width / FOLDER_W)),
+    )
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
+  return (
+    <div ref={ref} className="more-card-folder" style={{ height: FOLDER_H * scale }}>
+      {scale > 0 && (
+        <div className="more-card-folder-inner" style={{ transform: `scale(${scale})` }}>
+          <GlassFolder width={FOLDER_W} {...props} />
+        </div>
+      )}
     </div>
   )
 }
@@ -371,38 +486,35 @@ function Projects({ detailed = false }: { detailed?: boolean }) {
               <span className="more-work-meta">{moreProjects.length} more</span>
             </header>
             <div className="more-grid">
-              {moreProjects.map((m, i) => {
-                const inner = (
-                  <>
-                    <div className="more-card-top">
-                      <span className="more-card-num">{pad2(i + 1)}</span>
-                      <span className="more-card-year">{m.year}</span>
-                    </div>
-                    <h4 className="more-card-title">{m.title}</h4>
-                    <span className="more-card-type">{m.type}</span>
-                    {m.href && (
-                      <span className="more-card-arrow" aria-hidden="true">
-                        ↗
-                      </span>
-                    )}
-                  </>
-                )
-                return m.href ? (
-                  <a
-                    className="more-card"
-                    key={i}
-                    href={m.href}
-                    target="_blank"
-                    rel="noopener"
-                  >
-                    {inner}
-                  </a>
-                ) : (
-                  <div className="more-card" key={i}>
-                    {inner}
+              {/* kotak = <article>, bukan <a>: folder isinya button, gak boleh di dalem link */}
+              {moreProjects.map((m, i) => (
+                <article className="more-card" key={i}>
+                  <div className="more-card-top">
+                    <span className="more-card-num">{pad2(i + 1)}</span>
+                    <span className="more-card-year">{m.year}</span>
                   </div>
-                )
-              })}
+                  <FitFolder
+                    label={m.title}
+                    stamp={m.stamp}
+                    files={m.files}
+                    action="none"
+                    appearDelay={i * 140}
+                  />
+                  <h4 className="more-card-title">
+                    {m.href ? (
+                      <a className="more-card-link" href={m.href} target="_blank" rel="noopener">
+                        {m.title}
+                        <span className="more-card-arrow" aria-hidden="true">
+                          ↗
+                        </span>
+                      </a>
+                    ) : (
+                      m.title
+                    )}
+                  </h4>
+                  <span className="more-card-type">{m.type}</span>
+                </article>
+              ))}
             </div>
           </div>
         )}

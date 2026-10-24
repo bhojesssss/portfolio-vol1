@@ -419,6 +419,17 @@ body{overflow-x:hidden}
 .more-card-type{font-family:"Space Mono",monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
 .more-card-arrow{position:absolute;top:24px;right:28px;color:var(--muted);font-size:14px;opacity:0;transform:translate(-4px,4px);transition:opacity .3s,transform .3s,color .3s}
 .more-card:hover .more-card-arrow{opacity:1;transform:translate(0,0);color:var(--red)}
+.more-card-link{color:inherit;text-decoration:none;transition:color .3s}
+.more-card-link:hover{color:var(--red)}
+/* folder arsip (GlassFolder) — digambar 340px, di-scale lewat FitFolder */
+.more-card-folder{position:relative;width:100%;max-width:340px;margin:4px auto 0}
+/* absolute → lebar 340px-nya gak ikut ngelebarin kolom grid */
+.more-card-folder-inner{position:absolute;left:0;top:0;width:340px;transform-origin:0 0}
+.more-card:has(.gf-root[data-open]){z-index:2}
+/* judul udah ada di bawah folder, jadi di panel depan cuma "● 3 ITEMS" */
+.more-card .gf-title{display:none}
+/* hover di mana aja dalam kotak = folder ikut "ngintip" + nyala merah */
+.more-card:hover .gf-root:not([data-open]){--gf-hinge:-11deg;--gf-lift:-34px;--gf-spread:8px;--gf-fan:1.4deg;--gf-stack:10px;--gf-hot:1}
 
 @media (max-width:980px){.more-grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:780px){
